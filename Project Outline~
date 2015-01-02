@@ -1,0 +1,30 @@
+Student Management System Outline
+
+Introduction
+************
+
+This project is a server-based student management system. It allows users to register students, as well view, edit and track information ranging from their current classes, event calendar, timetables, communications and basic book keeping and online accounts payments.
+
+The project is based around Python (2.7), Django (1.7) and PostgreSQL (9.3) and has been developed to run on Linux based systems.
+
+
+Requirements
+************
+
+1. First install Python (2.7), Django (1.7) and PostgreSQL (9.3).
+
+2. After installing Django, also install a django app called 'autofixture'. This is used to automatically populate the database with data, primarily usefull for testing. Django 1.7 should come with pip already installed, so you can use this command to install autofixture from the command line :~ pip install django-autofixture
+
+  .If you would not like to use it, remember to remove it from installed apps in the settings.py file.
+  
+
+Outline
+*******
+
+Major functional aspects of the site are broken up into several discrete apps. All of the apps listed below have been created for the SMS system. Whilst some apps, for example the calendar app, are effectively stand alone, some are closely related, although the goal is for each app to stand completely alone. Those marked with an asterix (*) are either still in conception or in the very early stages of development.
+
+bookkeeping* - Basic bookkeeping functions
+
+cal - calendar with the ability to add and display events and send e-mail reminders.
+
+msg_box - 
