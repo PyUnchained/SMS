@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static "css/msg_box.css" %}" type="text/css">
+
+<div class ="btn-group">
+	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Inbox</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Sent Messages</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">Trash</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">New Message</a>
+</div>
+<br><br>
+
+<!-- Search-box -->
+        <div class="search-wrapper">
+        	<div class="row">
+        		<div class="col-sm-4">
+        			<h4>Find Student/Staff</h4>
+        			<input id="search-students" placeholder = 'Type to Begin Search' type="text"/>
+        			<div id="results">
+                	</div>
+        		</div>
+        		<div class="col-sm-4">
+        		</div>
+        		<div class="col-sm-4">
+        		</div>
+        	</div>
+        </div>
+<!-- End of search-box -->
+        <hr>
+
+<form class="compose-mesage-form" action="{% url 'msg_box_compose' %}" method="POST">
+	{% csrf_token %}
+	<table id = 'message-info'>
+	{{test}}
+	{% if success_message %}
+	<tr>
+		<p class = 'success'>
+		{{ success_message }}
+		</p>		
+	</tr>
+	{% endif %}
+	<tr>
+		<td class="table-label"><strong>New Recepients: </strong></td>
+		<td></td>
+		{% if form.new_recepients.errors %}
+		<td>{{form.new_recepients}}{{form.new_recepients.errors}}</td>
+		{% else %}
+		<td>{{form.new_recepients}}</td>
+		{% endif %}
+	</tr>
+	{% if recepients_warning %}
+	<tr>
+		<p class = 'warning'>
+		The following recepients do not:<br>
+		{% for warning in recepients_warning %}
+			{{warning}}
+		{% endfor %}
+		</p>
+		
+	</tr>
+	{% endif %}
+	<tr>
+		<td class="table-label"><strong>Title: </strong></td>
+		<td>&nbsp;</td>
+		{% if form.title.errors %}
+		<td>{{form.title}}{{form.title.errors}}</td>
+		{% else %}
+		<td>{{form.title}}</td>
+		{% endif %}
+	</tr>
+	<tr>
+		<td class="table-label"><strong>Body: </strong></td>
+		<td></td>
+		{% if form.body.errors %}
+		<td>{{form.body}}{{form.body.errors}}</td>
+		{% else %}
+		<td>{{form.body}}</td>
+		{% endif %}
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td><input class = "btn btn-primary" type = 'submit' value = "Send Message"></td>
+	</tr>
+	</table>
+	
+</form>
+
+{% endblock %}

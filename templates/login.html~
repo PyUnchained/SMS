@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Load django tags for static files and bootstrap css for django forms -->
+{% load static %}
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Live session user" >
+
+    <title>{{ title }}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{% static "css/login.css" %}" rel="stylesheet">
+    <link href="{% static "css/styles.css" %}" rel="stylesheet">
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
+</head>
+
+<body>
+			<div class = "container">
+				<div class = "login">
+					<h1>Study Web Login</h1>
+					<form class ="login-form" action = "/login/" method = "POST"> 
+					{% csrf_token %}
+					{{ form }}
+					<ul class="list-inline centre">
+						<li><input class = "btn btn-default btn-primary btn-sm" type = 'submit' value = "Sign In">
+						</li>
+						<li><a href="https://www.facebook.com/pages/ILSA-College-Namibia/156073441120985" class="btn btn-default btn-success btn-sm">Sign Up</a>
+						</li>
+						<li><a href="/" class="btn btn-default btn-danger btn-sm">Cancel</a>
+						</li>
+					</ul>
+					</form>
+				</div>
+				<div class = "login-help">
+					{% if errmessage %}
+						<p class="warning-info">{{ errmessage }}</p>
+					{% endif %}
+					<p>Forgot your password? <a href="#">Click Here</a>
+				</div>
+			</div>
+			
+</body>

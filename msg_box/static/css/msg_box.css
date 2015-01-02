@@ -1,0 +1,40 @@
+.table td, .table th {
+    max-height: 4px;
+    margin: 0px;
+    padding: 0px !important;
+    line-height: 1.5em !important;
+
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #ccc8e1;
+ }
+
+ .read {
+ 	font-size: 13px;
+ }
+
+
+.message-box {
+	padding:0px 10px 0px 10px;
+	margin-bottom: 150px;
+	border: inset 1px;
+	border-color: #488485 #5C9D9D #5C9D9D #488485;
+	border-radius: 5px;
+	-webkit-box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.4);
+	box-shadow: 2px 2px 5px 1px #417690;
+}
+
+#message-info tr {
+	line-height: 30px;
+}
+
+.table-label {
+	text-align: right;
+}
+
+.errorlist {
+	float: right;
+}

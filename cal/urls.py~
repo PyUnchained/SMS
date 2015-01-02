@@ -1,0 +1,19 @@
+try:
+    from django.conf.urls import patterns, url
+except ImportError:
+    from django.conf.urls.defaults import patterns, url
+    
+urlpatterns = patterns(
+    '',
+    #URLs for acessing the basic profile information.
+    url(r'^3year/$', 'cal.views.main'),
+    url(r'^3year/(\d+)/$', 'cal.views.main'),
+    
+    url(r"^bymonth/(\d+)/(\d+)/(prev|next)/$", 'cal.views.month'),
+    url(r"^bymonth/(\d+)/(\d+)/$", 'cal.views.month'),
+    url(r"^bymonth/$", 'cal.views.month'),
+    
+    url(r"^byday/(\d+)/(\d+)/(\d+)/$", 'cal.views.day'),
+    
+    
+)

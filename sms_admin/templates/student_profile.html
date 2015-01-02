@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main_content_nav %}
+<div class ="btn-group">
+	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Classes</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Marks</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">History</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">Send Message</a>
+</div>
+
+<!-- Search-box -->
+        <div class="search-wrapper">
+        	<div class="row">
+        		<div class="col-sm-4">
+        			<h4>Find Student/Staff</h4>
+        			<input id="search-students" placeholder = 'Type to Begin Search' type="text"/>
+        			<div id="results">
+                	</div>
+        		</div>
+        		<div class="col-sm-4">
+        		</div>
+        		<div class="col-sm-4">
+        		</div>
+        	</div>
+        </div>
+<!-- End of search-box -->
+{% endblock %}
+
+
+{% block main_content %}
+	<div class="profile-heading">
+		<h3>{{ student.user.first_name }} {{ student.user.last_name}}'s Profile</h3>
+		<h4> Status: {% if student.is_active %}
+			<span class = 'active'>Active</span>
+			{% else %}
+			<span class = 'danger'>Inactive</span>
+			{% endif %}
+		</h4>
+	</div>
+
+
+
+	<div class="profile">
+		<div class="profile-section">
+		<h4>Personal Information</h4>
+		<div class="row">
+			<div class="col-sm-12">
+				<strong>Id: </strong>
+				{{profile_form.personid}}
+			</div>			
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-3">
+				<strong>First Name</strong><br>{{user_form.first_name}}
+			</div>
+			<div class="col-sm-3">
+				Middle Name<br>{{profile_form.middle_name}}
+			</div>
+			<div class="col-sm-3">
+				<strong>Last Name</strong><br>{{user_form.last_name}}
+			</div>
+			<div class="col-sm-3">
+				<strong>Sex</strong><br>{{profile_form.sex}}
+			</div>			
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<strong>D.O.B</strong><br>{{profile_form.date_of_birth}}
+			</div>
+			<div class="col-sm-3">
+				<strong>National ID</strong><br>{{profile_form.national_id}}
+			</div>		
+		</div>
+			
+		<hr>
+
+		</div>
+		<div class="profile-section">
+		<h4>Contact Details</h4>
+		
+		<div class="row">
+			<div class="col-sm-4">
+				<strong>Email</strong><br>{{user_form.email}}
+			</div>
+			<div class="col-sm-4">
+				Skype<br>{{profile_form.skype}}
+			</div>
+			<div class="col-sm-4">
+				<strong>Preffered Cell</strong><br>{{profile_form.preffered_cell}}
+			</div>				
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<strong>Street</strong><br>{{profile_form.billing_address_street}}
+			</div>
+			<div class="col-sm-4">
+				<strong>City</strong><br>{{profile_form.billing_address_city}}
+			</div>
+			<div class="col-sm-4">
+				<strong>Country</strong><br>{{profile_form.billing_address_country}}
+			</div>	
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<strong>Home Phone</strong><br>{{profile_form.homephone}}
+			</div>
+			<div class="col-sm-4">
+				<strong>Secondary Cell</strong><br>{{profile_form.secondary_cell}}
+			</div>
+			<div class="col-sm-4">
+				<strong>Tertiary Cell</strong><br>{{profile_form.tertiary_cell}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<strong>Secondary Email</strong><br>{{profile_form.email2}}
+			</div>
+		</div>
+		
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

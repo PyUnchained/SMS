@@ -1,0 +1,60 @@
+{% extends 'cal_base.html' %}
+
+{% load static %}
+
+{% block cal_content %}
+<div class="content-block">
+<div class="cal_navigation text-center row">
+    <div class="col-sm-6">
+        <a class="btn btn-primary" href = "{% url "cal.views.month" year month|add:"-1" %}"><i class = 'fa fa-toggle-left'></i> Prev</a>
+    </div>
+    <div class="col-sm-6">
+        <a class="btn btn-primary" href = "{% url "cal.views.month" year month|add:"1" %}">Next <i class = 'fa fa-toggle-right'></i></a>
+    </div>  
+</div>
+
+<h2 class="centered-heading">{{ mname }} {{ year }}</h2>
+
+<div class="month">
+    <table class = 'table table-striped table-responsive table-bordered'>
+
+    <tr>
+        <td class="empty">Mon</td>
+        <td class="empty">Tue</td>
+        <td class="empty">Wed</td>
+        <td class="empty">Thu</td>
+        <td class="empty">Fri</td>
+        <td class="empty">Sat</td>
+        <td class="empty">Sun</td>
+    </tr>
+
+    {% for week in month_days %}
+        <tr>
+        {% for day, entries, current in week %}
+
+            <!-- TD style: empty | day | current; onClick handler and highlight  -->
+            <td class= {% if day == 0 %}"empty"{% endif %}
+            {% if day != 0 and not current %}"day"{% endif %}
+            {% if day != 0 and current %}"current"{% endif %}
+            {% if day != 0 %}
+                onClick="parent.location='{% url 'cal.views.day' year month day %}';"
+            {% endif %} height = '100' width = '50'>
+
+            <!-- Day number and entry snippets -->
+            {% if day != 0 %}
+                {{ day }}
+                {% for entry in entries %}
+                    {{ entry.title|safe }}
+                {% endfor %}
+            {% endif %}
+            </td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+
+    <div class="clear"></div>
+	</div>
+</div>
+
+{% endblock %}

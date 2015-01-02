@@ -1,0 +1,35 @@
+{% extends 'msg_box_results_base.html' %}
+
+{% load static %}
+
+{% block list %}
+
+<div class = 'results-wrapper'>
+<table>
+	{% if id_result or name_result %}
+
+	{% for item in name_result %}
+	<tr>
+		<td class = 'contact'>{{ item.user.first_name }} {{ item.user.last_name }}</td>
+		<td><i id = '{{ item.personid }}<{{ item.user.first_name }} {{ item.user.last_name }}>' class="msg_box_icon fa fa-check-square-o"></i></td>
+	</tr>
+	{% endfor %}
+
+	{% for item in id_result %}
+	<tr>
+		<td class = 'contact'>{{ item.personid }}
+	{{ item.first_name }} {{ item.last_name }}</td>
+		<td><i id = '{{ item.personid }}' class="msg_box_icon fa fa-check-square-o"></i></td>
+	</tr>
+	{% endfor %}
+
+	{% else %}
+	<tr>
+		<td>No Results Found</td>
+	</tr>
+	{% endif %}
+
+</table>
+</div>
+
+{% endblock %}

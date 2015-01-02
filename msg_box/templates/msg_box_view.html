@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static "css/msg_box.css" %}" type="text/css">
+
+<div class="message-wrapper row">
+	<div class="message">
+		
+		<div class="row">
+			<div class="col-xs-12">
+				<div class ="btn-group">
+					<a class ="btn btn-primary" href="#">Reply</a>
+					<a class ="btn btn-primary" href="#">Delete</a>
+					<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Inbox</a>
+					<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Sent Messages</a>
+					<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">Trash</a>
+				</div>
+				<br><br>
+				<table id = 'message-info'>
+					<tr>
+						<td class="table-label"><strong>Sent by: </strong></td>
+						<td>&nbsp;</td>
+						<td><span class="message-box">{{message.sender}}</span></td>
+					</tr>
+					<tr>
+						<td class="table-label"><strong>Sent on: </strong></td>
+						<td></td>
+						<td><span class="message-box">{{message.sent_on|date:'d M f'}}</span></td>
+					</tr>
+					<tr>
+						<td class="table-label"><strong>Title: </strong></td>
+						<td></td>
+						<td><span class="message-box">{{message.title}}</span></td>
+					</tr>
+				</table>
+				<br>
+				<strong>Message</strong>
+				<div class="message-box">
+					{{message.body}}
+				</div>
+			</div>
+		</div>		
+	</div>
+	
+</div>
+
+
+{% endblock %}

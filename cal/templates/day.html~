@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block custom-css %}
+<link href="{% static "css/forms.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="content-block">
+	<h2 class="centered-heading">Today's Entries</h2>
+	<h3 class="centered-heading">{{ day }} {{ monthtext }}</h3>
+	<hr>
+{% if size == 0 %}
+	<div class="general-info">
+		<h2>No Scheduled Events</h4>
+		<p>You may add one or more events below.</p>
+	</div>
+	
+	<hr>
+{% endif %}
+
+	<form action =" {% url "cal.views.day" year month day %} " method = "POST">
+	{% csrf_token %}
+
+	{{ entries.management_form }}
+
+	{% for entry in entries.forms %}
+	  {% if entry.title %}
+		<div class = 'entry'>
+			<div id='inp1'>
+				<p><label>Title:</label> {{ entry.title }}<a class ="btn btn-primary" href="{% url "django_messages.views.inbox" %}">Inbox</a></p>
+			</div>
+			<p><label>Reminder Text:</label> {{ entry.body }}</p>
+			<p><label class="check-box-label">Send E-mail Reminder:</label> {{ entry.remind }}</p>
+			<hr>
+		</div>
+	  {% endif %}
+	{% endfor %}
+	
+	<input type = "submit" value = "Save"/>
+	</form>
+</div>
+{% endblock %}

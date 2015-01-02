@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static "css/msg_box.css" %}" type="text/css">
+
+<div class ="btn-group">
+	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Inbox</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Sent Messages</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">Trash</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">New Message</a>
+</div>
+
+<h4>{{box_name}}</h4>
+
+{% if inbox_count %}
+<strong>{{ inbox_count }}</strong> unread messages.
+{% endif %}
+
+{% if box %}
+<div class="table-responsive table-striped">
+<table class = 'msg_box_table table table-striped' data-row-style = 'striped'>
+	<tr>
+		<th scope="col">Sent On</th>
+		<th scope="col">Title</th>
+		<th scope="col">Actions</th>
+	</tr>
+
+{% for message in box %}
+
+{% if message.read_on %}
+	<tr class="un-read">
+		<td scope="row">{{message.sent_on|date:'d M f'}}</td> scope="row">
+		<td scope="row"><a href="{% url 'msg_box_view' message.pk %}">{{message.title}}</a></td>
+		<td scope="row">Reply &nbsp; Forward &nbsp; Delete</td>
+	</tr>
+{% else %}
+	<tr class="read">
+		<td scope="row">{{message.sent_on|date:'d M f'}}</td>
+		<td scope="row"><a href="{% url 'msg_box_view' message.pk %}">{{message.title}}</a></td>
+		<td scope="row"><a href="{% url 'msg_box_forward' message.pk 're' %}"> Reply</a> &nbsp; <a href="{% url 'msg_box_forward' message.pk 'fwd' %}"> Forward</a> &nbsp; <a href="{% url 'msg_box_delete' message.pk %}"> Delete</a></td>
+	</tr>
+{% endif %}	
+
+{% endfor %}
+
+{% else %}
+	<p>There are currently no messages to display</p>
+
+</table>
+</div>
+{% endif %}
+
+
+{% endblock %}

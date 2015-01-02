@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block main_content %}
+	<h3>Student Registry</h3>
+
+	<div class = 'search-bar'>
+		<div class = 'search-row row'>
+			<div class="col-sm-4 search-col">
+				<p>Search by <strong>name</strong> or <strong>id</strong>:</p>
+				<input id="search-students" placeholder = 'Type to Begin Search' type="text"/>
+    			<div id="results">
+            	</div>				
+			</div>
+			<div class="col-sm-4 search-col">
+				<p>Search by <strong>course</strong> or <strong>class</strong>:</p>
+				<input id="search-group" placeholder = 'Type to Begin Search' type="text"/>
+    			<div id="group-results">
+            	</div>				
+			</div>
+		</div>
+	</div>
+	<div class="results">
+		{% if allstudents.paginator.num_pages > 1 %}
+		<div class="result-pagination">
+				<span class="step-links">
+					{% if allstudents.has_previous %}
+						<a class="btn btn-sm" href="?page={{ allstudents.previous_page_number }}"><i class = 'fa fa-toggle-left'></i> Previous</a>
+					{% endif %}
+				<span class="current">
+					Page {{ allstudents.number }} of {{ allstudents.paginator.num_pages }}.
+				</span>
+					{% if allstudents.has_next %}
+						<a class="btn btn-sm" href="?page={{ allstudents.next_page_number }}">Next <i class = 'fa fa-toggle-right'></i></a>
+					{% endif %}
+				</span>
+			</div>
+		{% endif %}
+		
+		<table id = 'view-results-table' class="table table-responsive table-striped">
+			<thead class="centered-text">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>ID</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			{% for student in allstudents %}
+			<tr>
+				<td>{{student.user.first_name}}</td>
+				<td>{{student.user.last_name}}</td>
+				<td>{{student.personid}}</td>
+				<td>
+				<a class="btn btn-sm" href="{% url 'view_one_student' student.personid %}">Manage Profile</a>
+				
+				<a class="btn btn-sm" href="{% url 'view_one_student' student.personid %}">Account</a>
+				
+				<a class="btn btn-sm" href="{% url 'view_one_student' student.personid %}">Education History</a>
+				
+				<a class="btn btn-sm" href="{% url 'msg_box_forward' student.personid 'new' %}">Message</a>
+				</td>
+			</tr>
+			{% endfor %}
+			<tfoot>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>ID</th>
+					<th>Actions</th>
+				</tr>
+			</tfoot>
+		</table>
+
+
+		
+			{% if allstudents.paginator.num_pages > 1 %}
+			<div class="result-pagination">
+					<span class="step-links">
+						{% if allstudents.has_previous %}
+							<a class="btn btn-sm" href="?page={{ allstudents.previous_page_number }}"><i class = 'fa fa-toggle-left'></i> Previous</a>
+						{% endif %}
+					<span class="current">
+						Page {{ allstudents.number }} of {{ allstudents.paginator.num_pages }}.
+					</span>
+						{% if allstudents.has_next %}
+							<a class="btn btn-sm" href="?page={{ allstudents.next_page_number }}">Next <i class = 'fa fa-toggle-right'></i></a>
+						{% endif %}
+					</span>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block sidebar %}
+	<h3>Notifications</h3>
+
+{% endblock %}

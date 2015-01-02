@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block main_content %}
+	<h3>SMS Overview</h3>
+
+	<div class = 'row hud'>
+		<div class = 'col-sm-4'>
+			<h4>Unread Messages (<a href="{% url 'msg_box_inbox' %}">{{unread_messages}}</a>)</h4>
+
+			<a href="{% url 'msg_box_inbox' %}">Go to Messaging</a>
+		</div>
+		<div class = 'col-sm-4'>
+			<h4>Upcoming Events</h4>
+		</div>
+		<div class = 'col-sm-4'>
+			<h4>System Notifications</h4>
+		</div>
+	</div>
+	<div class="row info-bar">
+		<a href="">Accounting</a>
+	</div>
+
+
+{% endblock %}
+
+{% block sidebar %}
+	<h3>Notifications</h3>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'cal_base.html' %}
+
+{% load static %}
+
+{% block cal_content %}
+<div class="content-block">
+	<div class="cal_navigation text-center row">
+	    <div class="col-sm-6">
+	        <a class="btn btn-primary" href = "{% url "cal_day" year month day|add:"-1" %}"><i class = 'fa fa-toggle-left'></i> Prev</a>
+	    </div>
+	    <div class="col-sm-6">
+	        <a class="btn btn-primary" href = "{% url "cal_day" year month day|add:"1" %}">Next <i class = 'fa fa-toggle-right'></i></a>
+	    </div>  
+	</div>
+	<br>
+
+	<h2 class="centered-heading">Today's Entries</h2>
+	<h3 class="centered-heading">{{ day }} {{ monthtext }}</h3>
+
+	<div class="row">
+	{% for entry in my_entries %}
+	<div class="col-sm-3 cal-entry">
+		<h4>{{ entry.title }}</h4>
+		{{ entry.date|date:'P' }}
+		<br>
+		{{ entry.body }}
+	</div>
+	{% endfor %}
+	</div>
+
+	<div class="row">
+	{% for entry in all_entries %}
+	<div class="col-sm-3 cal-entry">
+		<h4>{{ entry.title }}</h4>
+		{{ entry.date|date:'P' }}
+		<br>
+		{{ entry.body }}
+	</div>
+	{% endfor %}
+	</div>
+	<hr>
+
+	<form action =" {% url "cal.views.day" year month day %} " method = "POST">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-sm-4">
+		<strong>Title: </strong>
+			<div class="form-data">
+				{% if form.title.errors %}
+				{{form.title}}{{form.title.errors}}
+				{% else %}
+				{{form.title}}
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-sm-2">
+		<strong>Date: </strong>
+			<div class="form-data">
+				{% if form.date.errors %}
+				{{form.date}}{{form.date.errors}}
+				{% else %}
+				{{form.date}}
+				{% endif %}
+			</div>
+			
+		</div>
+		<div class="col-sm-2">
+		<strong>Time: </strong>
+			<div class="form-data">
+				{% if form.time.errors %}
+				{{form.time}}{{form.time.errors}}
+				{% else %}
+				{{form.time}}
+				{% endif %}
+			</div>
+			
+		</div>
+		<div class="col-sm-4">
+		<strong>Snippet: </strong>
+		<div class="form-data">
+			{% if form.snippet.errors %}
+			{{form.snippet}}{{form.snippet.errors}}
+			{% else %}
+			{{form.snippet}}
+			{% endif %}
+		</div>
+		</div>
+		<div class="col-sm-6">
+		<strong>Body: </strong>
+		<div class="form-data">
+			{% if form.body.errors %}
+			{{form.body}}{{form.body.errors}}
+			{% else %}
+			{{form.body}}
+			{% endif %}
+		</div>
+
+			
+		</div>
+		<div class="col-sm-6">
+		<strong>E-mail reminders: </strong>
+		
+			{% if form.remind.errors %}
+			{{form.remind}}{{form.remind.errors}}
+			{% else %}
+			{{form.remind}}
+			{% endif %}
+
+			
+		</div>
+	
+	</div>	
+	<input class="btn btn-primary" type = "submit" value = "Create New"/>
+	</form>
+</div>
+{% endblock %}
+
+<link href="{% static "js/jquery.datetimepicker.js" %}" rel="stylesheet">
+<script type="text/javascript">
+$(document).ready( function() {
+	$('#id_date').datetimepicker();
+});
+</script>

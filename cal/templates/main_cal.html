@@ -1,0 +1,41 @@
+{% extends 'cal_base.html' %}
+
+{% load static %}
+
+{% block cal_content %}
+
+<div class="cal_navigation text-center row">
+	<div class="col-sm-6">
+		<a class="btn btn-primary" href = "{% url "cal.views.main" year|add:"-3" %}"><i class = 'fa fa-toggle-left'></i> Prev</a>
+	</div>
+	<div class="col-sm-6">
+		<a class="btn btn-primary" href = "{% url "cal.views.main" year|add:"3" %}">Next <i class = 'fa fa-toggle-right'></i></a>
+	</div>	
+</div>
+
+
+
+
+	{% for year,months in years %}
+		<div class = 'clear'></div>
+		<h2 class="text-center">{{ year }}</h2>
+		<div class="row text-center">
+		{% for month in months %}
+			<div class = 
+			{% if month.current %}'current col-sm-4'
+			{% endif %}
+			{% if not month.current %}'month col-sm-4'
+			{% endif %}>
+			
+			{% if month.entry %}<b>{% endif %}
+			<a href = "{% url 'cal.views.month' year month.n %}"> {{ month.name }}</a>
+			{% if month.entry %}</b>{% endif %}
+			</div>
+			
+			{% if month.n == 6 %}<br>{% endif %}
+		{% endfor %}
+		</div>
+	{% endfor %}
+	
+{% endblock %}
+			
