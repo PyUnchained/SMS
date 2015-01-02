@@ -1,0 +1,12 @@
+To Do List
+**********
+
+These items are the major aspects of the system that need to be tackled in order to get the system up to par:
+
+1. Testing - Code without tests is broken, and in that regard this system is in complete disarray.
+
+2. office app - The office app can handle basic record keeping and alterations, but must be completed to allow to track classes, graduations, assignments (creation, submission and recording marks).
+
+3. bookkeeping app - Whilst not very intensive (it is largely a matter of addition and subtraction) this must be finalized in order to carry out the next phase). It also needs to make allowances for tracking receipts and various payment methods (i.e. Ecocash).
+
+4. sms_admin app - The interface needs to be finalized to make the system usable. Whilst it technically can already be used to carry out 70% of the desired functionality, the user interface has not yet been completed and so in practical terms for an end-user it is useless.
