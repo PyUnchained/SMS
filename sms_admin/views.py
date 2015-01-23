@@ -109,3 +109,101 @@ def view_students(request, student_id = None, old_trail = None):
 				{'allstudents':allstudents,
 				'test':student_list},
 			    context_instance = RequestContext(request))
+
+def view_classes(request, student_id, action = None):
+
+	"""Handles requests to view information on a student's all_classes
+	and also handles actions when viewing classes"""
+
+	completion_events_list = []
+	code_list = []
+	failed_list = []
+	
+	student = Student.objects.get(pk = student_id)
+
+
+	if request.method == "POST":
+
+		search_form = ClassSearchForm(request.POST)
+
+		if search_form.is_valid():
+
+			#Create list of individual codes <-->Strip all empty spaces
+			#and create a new list <--> Remove blank entry at end of list 
+			form_data = search_form.cleaned_data['new_classes'].split(',')
+
+			for data in form_data:
+				if len(data) > 1:
+					code_list.append(data.strip())
+
+			for code in code_list:
+				try:
+					new_class = Class.objects.get(code = code)
+					new_class.students.add(student)
+
+				except ObjectDoesNotExist:
+					failed_list.append(code)
+
+			all_classes = Class.objects.filter(students = student,
+				is_active = True).order_by('start_date')
+
+
+			completion_events = CompletionEvent.objects.filter(student = student)
+			
+
+			for event in completion_events:
+				for member in all_classes:
+					if event.for_class == member:
+						completion_events_list.append(member.code)
+
+
+				search_form = ClassSearchForm()
+
+		return render(request, 'student_classes.html',
+		{'student':student,
+		'all_classes':all_classes,
+		'completed_classes':completion_events_list,
+		'form_data':code_list,
+		'class_search_form': search_form})
+
+	else:
+
+		search_form = ClassSearchForm()
+
+		student = Student.objects.get(pk = student_id)
+		#If the action to add a class has been requested, add the student to
+		#the class before searching db.
+
+
+		all_classes = Class.objects.filter(students = student,
+			is_active = True).order_by('start_date')
+
+
+		completion_events = CompletionEvent.objects.filter(student = student)
+		
+
+		for event in completion_events:
+			for member in all_classes:
+				if event.for_class == member:
+					completion_events_list.append(member.code)
+
+
+			search_form = ClassSearchForm()
+
+
+		#tags, in this case a list of all the products stored in the database.
+		return render(request, 'student_classes.html',
+			{'student':student,
+			'all_classes':all_classes,
+			'completed_classes':completion_events_list,
+			'class_search_form': search_form})
+
+def class_details(request, pk):
+
+	"""Handles viewing detailed information on a specific class."""
+	
+	detail_for = Class.objects.get(pk = pk)
+
+	if action == 'class_info':
+		return render(request, 'class_details.html',
+		{'class':detail_for})

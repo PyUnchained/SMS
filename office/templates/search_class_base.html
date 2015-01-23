@@ -1,0 +1,26 @@
+{% load static %}
+
+{% block list %}
+
+
+{% endblock %}
+
+<script type="text/javascript">
+$(document).ready( function() {
+
+	$(".results-wrapper i").click(function(){
+		var value = this.id;
+		var input = $('#id_new_classes');
+		input.val(input.val() + ' ' + value + ', ');
+	});
+
+	$(document).click(function() {
+    	$('.results-wrapper').slideUp('fast');
+	});
+
+	$(".results-wrapper").click(function(e) {
+    	e.stopPropagation();
+    });
+});
+
+</script>

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main_content_nav %}
+<div class ="btn-group">
+	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Classes</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Marks</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">History</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">Send Message</a>
+</div>
+
+
+{% endblock %}
+
+
+{% block main_content %}
+
+<div class="">
+	<h3>{{ student.user.first_name }} {{ student.user.last_name}}'s Classes</h3>
+	<h4> Status: {% if student.is_active %}
+		<span class = 'active'>Active</span>
+		{% else %}
+		<span class = 'danger'>Inactive</span>
+		{% endif %}
+	</h4>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+			<!-- Search-box -->
+	        <div class="search-wrapper">
+	        			<h4>Find Class:</h4>
+	        			<input id="search-class" placeholder = 'Type to Begin Search' type="text"/>
+	        			<div id="class-results">
+	                	</div>
+	        	<div class="row"></div>
+	        	
+	        </div>
+
+	    <form class="compose-mesage-form" action="{% url 'view_student_classes' student.personid 'add_class' %}" method="POST">
+	    {% csrf_token %}
+		{{class_search_form.new_classes}}
+		<input class = "btn btn-primary" type = 'submit' value = "Add">
+		</form>
+
+
+	</div>
+</div>
+<br>
+<!-- End of search-box -->
+
+
+<div class="">	
+	{% if all_classes %}
+		{% for class in all_classes %}
+
+		{% if class.code in completed_classes %}
+		<div class="profile-item completed-class">
+		{% else %}
+		<div class="profile-item">
+		{% endif %}
+		<div class="row">
+
+			<div class="col-sm-3">
+				<strong>Class Code</strong><br>{{ class.code }}
+			</div>
+			<div class="col-sm-3">
+				<strong>Course</strong><br>{{ class.course.title }}
+			</div>
+			<div class="col-sm-3">
+				<strong>Schedule</strong><br>
+				{% if class.schedule %}
+					
+				{% else %}
+					<p>Unavailable</p>
+				{% endif %}
+			</div>
+			<div class="col-sm-3">
+				<strong>Completed</strong><br>
+				{% if class.code in completed_classes %}
+				<p>Yes</p>
+				{% else %}
+				<p>No</p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class ="btn-group text-center">
+					<a class ="btn btn-primary" href="{% url 'class_details' class.pk %}">View Class Details</a>
+					<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Marks as Completed</a>
+					<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">View Mark History</a>
+				</div>
+			</div>
+		</div>
+		</div>
+		{% endfor %}
+	{% else %}
+		<p> Student has no active classes</p>
+	{% endif %}
+</div>
+
+
+{% endblock %}

@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 
-from office.models import Student, Staff
+from office.models import Student, Staff, Class
 
 # Create your views here.
 def search(request):
@@ -63,6 +63,25 @@ def search(request):
 			id_result = Staff.objects.filter(reduce(operator.and_,
 				(Q(personid__icontains = x) for x in criteria[1:])
 				))
+
+		if criteria[0] == 'class':
+			
+			#search the records. Uses a generator function to
+			#create query conditions for every value in the
+			#search criterion
+			result1 = Class.objects.filter(reduce(operator.and_,
+				(Q(code__icontains = x) for x in criteria[1:])
+				))
+			result2 = Class.objects.filter(reduce(operator.and_,
+				(Q(campus__name__icontains = x) for x in criteria[1:])
+				))
+
+			class_result = list(chain(result1, result2))
+
+			return render_to_response('search-class.html',
+				{'class_result': class_result,},
+				context_instance = RequestContext(request))
+
 
 
 	#if nothing was typed, return no results

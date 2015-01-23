@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main_content_nav %}
+<div class ="btn-group">
+	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Classes</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Marks</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">History</a>
+	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">Send Message</a>
+</div>
+
+
+{% endblock %}
+
+
+{% block main_content %}
+
+<div class="">
+	<h3>{{class.code}}</h3>
+	<h4> Status: {% if class.is_active %}
+		<span class = 'active'>Active</span>
+		{% else %}
+		<span class = 'danger'>Inactive</span>
+		{% endif %}
+	</h4>
+</div>
+
+
+
+<div class="">	
+	<div class="profile-item">
+		<div class="row">
+			<div class="col-6-sm">
+			{% for teacher in class.teachers %}
+				{{teacher.user.first_name}}
+			{% endfor %}
+			</div>
+			<div class="col-6-sm">
+			{% for student in class.students %}
+				{{student.user.first_name}}
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

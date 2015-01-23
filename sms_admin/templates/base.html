@@ -14,7 +14,7 @@
         {% endblock %}
     </head>
 <body>
-    <div id = 'top-banner'>
+    <div id = 'top-banner' class="container">
         <div class="row">
             <div class="col-xs-8" id = 'top-banner-main-text'>
                 <h4>Student Management System (SMS)</h4>
@@ -36,6 +36,7 @@
         
         
     </div>
+    <div class="container">
     <div class ="row">
         <div class="col-xs-12" id = 'top-banner-breadcrumb'>
             <a href="{% url 'sms_admin.views.home' %}">Home</a>
@@ -44,7 +45,10 @@
             <a href="{% url 'cal_this_month' %}">Calendar</a>
         </div>
     </div>
+    </div>
 
+    <div class="container">
+    <div class="row">
     <div class="col-sm-2">
         <div id="common-task-bar" class="module">
             <h4>Common Tasks</h4>
@@ -66,6 +70,8 @@
         {% endblock %}
         {% block main_content %}
         {% endblock %}
+    </div>
+    </div>
     </div>
 </body>
 
@@ -97,6 +103,16 @@ $(document).ready( function() {
     
     $('#search-group').focusin( function() {
         $( '#group-results' ).show();
+    });
+
+    $( '#search-class' ).keyup( function() {
+        q = $('#search-class').val();
+        var q = 'class-' + q.replace(/\s+/g,'-');
+        $('#class-results').load( "{% url 'search' %}"+'?q=' + q );
+    });
+    
+    $('#search-class').focusin( function() {
+        $( '#class-results' ).show();
     });
 
 

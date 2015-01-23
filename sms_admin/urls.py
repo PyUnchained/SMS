@@ -12,4 +12,18 @@ urlpatterns = patterns('',
 
     url(r'^view_students/(\w+)/$',
     	'sms_admin.views.view_students', name = 'view_one_student'),
+
+    url(r'^student_classes/(\w+)/$',
+    	'sms_admin.views.view_classes', name = 'view_student_classes'),
+
+    url(r'^student_classes/(\w+)/(\w+)/$',
+        'sms_admin.views.view_classes', name = 'view_student_classes'),
+
+    url(r'^class_details/(\w+)/$',
+        'sms_admin.views.class_details', name = 'class_details'),
+
+    url(r'^class_details/(\w+\s+\w+)/$',
+        'sms_admin.views.class_details', name = 'class_details'),
+
+
 )

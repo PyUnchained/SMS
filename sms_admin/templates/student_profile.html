@@ -4,7 +4,7 @@
 
 {% block main_content_nav %}
 <div class ="btn-group">
-	<a class ="btn btn-primary" href="{% url 'msg_box_inbox' %}">Classes</a>
+	<a class ="btn btn-primary" href="{% url 'view_student_classes' student.personid %}">Classes</a>
 	<a class ="btn btn-primary" href="{% url 'msg_box_sentbox' %}">Marks</a>
 	<a class ="btn btn-primary" href="{% url 'msg_box_trashbox' %}">History</a>
 	<a class ="btn btn-primary" href="{% url 'msg_box_compose' %}">Send Message</a>
@@ -53,26 +53,26 @@
 		</div>
 		<br>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<strong>First Name</strong><br>{{user_form.first_name}}
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				Middle Name<br>{{profile_form.middle_name}}
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<strong>Last Name</strong><br>{{user_form.last_name}}
-			</div>
-			<div class="col-sm-3">
-				<strong>Sex</strong><br>{{profile_form.sex}}
-			</div>			
+			</div>	
 		</div>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<strong>D.O.B</strong><br>{{profile_form.date_of_birth}}
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<strong>National ID</strong><br>{{profile_form.national_id}}
-			</div>		
+			</div>
+			<div class="col-sm-4">
+				<strong>Sex</strong><br>{{profile_form.sex}}
+			</div>			
 		</div>
 			
 		<hr>
