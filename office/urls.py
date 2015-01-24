@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
 	url(r'^search/$', 'office.views.search', name = 'search'),
+	url(r'^search/(?P<pk>\w+)/$', 'office.views.search', name = 'search'),
 )

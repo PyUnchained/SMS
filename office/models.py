@@ -94,8 +94,14 @@ class CommonInfo(models.Model):
 
 	def __str__(self):
 		return ' '.join([
-			self.name,
-			self.surname
+			self.user.first_name,
+			self.user.last_name
+			])
+
+	def name(self):
+		return ' '.join([
+			self.user.first_name,
+			self.user.last_name
 			])
 
 	class Meta:
@@ -143,7 +149,7 @@ class Staff(CommonInfo):
 
 	def save(self, *args, **kwargs):
 		if not self.personid:
-			self.personid = generateid(self.user.name, self.middle_name, self.user.surname)
+			self.personid = generateid(self.user.first_name, self.middle_name, self.user.surname)
 		super(Staff, self).save( * args, ** kwargs)
 
 class Campus(models.Model):
@@ -178,6 +184,7 @@ class Course(models.Model):
 	duration = models.PositiveSmallIntegerField(help_text = 'Duration in weeks')
 	info_file = models.FileField(upload_to = 'course_info/%Y', blank =True,
     	null = True)
+	subjects = models.ManyToManyField('Subject', null = True)
 
 	is_active = models.BooleanField(default = True)
 
@@ -193,7 +200,7 @@ class Course(models.Model):
 class Class(models.Model):
 	"""Represents information pertinent to a specific class."""
 
-	code = models.CharField(max_length = 8)
+	code = models.CharField(max_length = 30)
 	teachers = models.ManyToManyField(Staff)
 	students = models.ManyToManyField(Student)
 	course = models.ForeignKey(Course)
@@ -208,15 +215,20 @@ class Class(models.Model):
 
 	def __str__(self):
 
-		return '{} {} : {}'.format(self.course.syllabus_code,
-			self.start_date,
-			self.campus.official_name)
+		return '{} {}'.format(self.course.syllabus_code,
+			self.start_date)
 
 	def add_student(student):
-		seld.students.add(student)
+		self.students.add(student)
 		return True
 
+	def deactivate(self):
+		self.is_active = False
+		return True
 
+	def activate():
+		self.is_active = True
+		return True
 
 	class Meta:
 		verbose_name_plural = 'classes'
@@ -224,22 +236,6 @@ class Class(models.Model):
 
 	class Admin():
 	    pass
-
-class CompletionEvent(models.Model):
-
-	student = models.ForeignKey(Student)
-	for_class = models.ForeignKey(Class, null = True)
-	grade = models.CharField(max_length = 30, blank = True)
-
-
-	has_passed = models.BooleanField(default = True)
-	completion_date = models.DateField()
-	input_date = models.DateField(auto_now_add = True)
-
-	class Admin():
-		pass
-
-
 
 
 class Subject(models.Model):
@@ -252,6 +248,8 @@ class Subject(models.Model):
 	description = models.TextField('Description',
 		max_length = 300)
 	courses = models.ManyToManyField(Course)
+
+	is_active = models.BooleanField(default = True)
 
 	def __str__(self):
 		return self.title
@@ -273,7 +271,8 @@ class Assignment(models.Model):
 	upload_file = upload_file = models.FileField(
 		upload_to = 'instructions/%Y', blank =True,
 		null = True)
-	classes = models.ManyToManyField(Class)
+	classes = models.ManyToManyField(Class, null = True)
+	subject = models.ManyToManyField(Subject, null = True)
 	due_date = models.DateTimeField('Due Date')
 	set_by = models.ForeignKey(Staff)
 
@@ -356,6 +355,21 @@ class CommonAction(models.Model):
 
 	class Admin():
 	    pass
+
+class CompletionEvent(models.Model):
+
+	student = models.ForeignKey(Student)
+	for_class = models.ForeignKey(Class, null = True)
+	for_subject = models.ForeignKey(Subject, null = True)
+	grade = models.CharField(max_length = 30, blank = True)
+
+
+	has_passed = models.BooleanField(default = True)
+	completion_date = models.DateField()
+	input_date = models.DateField(auto_now_add = True)
+
+	class Admin():
+		pass
 
 admin.site.register(Subject)
 admin.site.register(Class)

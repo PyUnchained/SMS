@@ -77,7 +77,7 @@ def view_students(request, student_id = None, old_trail = None):
 
 	#When a specific student is requested:
 	if student_id != None:
-		student = Student.objects.get(pk = student_id)
+		student = Student.objects.get(personid = student_id)
 		profile_form = EditStudentProfileForm(instance = student)
 		user_form = EditUserForm(instance = student.user)
 
@@ -119,7 +119,7 @@ def view_classes(request, student_id, action = None):
 	code_list = []
 	failed_list = []
 	
-	student = Student.objects.get(pk = student_id)
+	student = Student.objects.get(personid = student_id)
 
 
 	if request.method == "POST":
@@ -170,7 +170,7 @@ def view_classes(request, student_id, action = None):
 
 		search_form = ClassSearchForm()
 
-		student = Student.objects.get(pk = student_id)
+		student = Student.objects.get(personid = student_id)
 		#If the action to add a class has been requested, add the student to
 		#the class before searching db.
 
@@ -198,12 +198,180 @@ def view_classes(request, student_id, action = None):
 			'completed_classes':completion_events_list,
 			'class_search_form': search_form})
 
-def class_details(request, pk):
+
+def all_classes(request, action = None, pk = None):
+	"""
+	Allows users to view a list of all classes
+	"""
+	
+	#If an action has been requested
+	if action and pk != None:
+
+		#Marks class as deactivated.
+		if action == 'remove':
+			target_class = Class.objects.get(pk = pk)
+			target_class.deactivate()
+			target_class.save()
+
+	class_list = Class.objects.filter(is_active = True)
+
+	#Paginator handles displaying and changing between pages. Diplays
+	#20 records at a time from the student_list queryset.
+	paginator = Paginator(class_list, 20)
+
+
+	page = request.GET.get('page')
+	try:
+		all_classes = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		all_classes = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		all_classes = paginator.page(paginator.num_pages)
+
+	return render_to_response('all_classes.html',
+				{'all_classes':all_classes},
+			    context_instance = RequestContext(request))
+
+def all_courses(request, action = None, pk = None):
+	"""
+	Allows users to view a list of all classes
+	"""
+	
+	#If an action has been requested
+	if action and pk != None:
+
+		#Marks class as deactivated.
+		if action == 'remove':
+			target_class = Course.objects.get(pk = pk)
+			target_class.deactivate()
+			target_class.save()
+
+	course_list = Course.objects.filter(is_active = True)
+
+	#Paginator handles displaying and changing between pages. Diplays
+	#20 records at a time from the student_list queryset.
+	paginator = Paginator(course_list, 20)
+
+
+	page = request.GET.get('page')
+	try:
+		all_courses = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		all_courses = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		all_courses = paginator.page(paginator.num_pages)
+
+	return render_to_response('all_courses.html',
+				{'all_courses':all_courses},
+			    context_instance = RequestContext(request))
+
+def course_details(request, action = None, pk = None):
+
+	"""Handles viewing detailed information on a specific courses."""
+
+	if action and pk != None:
+		target_course = Course.objects.get(pk=pk)
+		subjects = target_course.subject_set.all()
+		campuses = target_course.campuses.all()
+
+		if action == 'edit':
+			if request.method == 'POST':
+				form = EditCourseForm(request.POST,
+					instance = target_course)
+				if form.is_valid():
+					form.save()
+
+					return render(request, 'course_details.html',
+						{'form':form,
+						'subjects':subjects,
+						'campuses':campuses,
+						'course':target_course})
+
+				else:
+
+					return render(request, 'course_details.html',
+						{'form':form,
+						'subjects':subjects,
+						'campuses':campuses,
+						'course':target_course})
+
+			else:
+				form = EditCourseForm(instance = target_course)
+
+				return render(request, 'course_details.html',
+				{'form':form,
+				'subjects':subjects,
+				'campuses':campuses,
+				'course':target_course})
+	
+	target_course = Course.objects.get(pk = pk)
+	subjects = target_course.subject_set.all()
+	campuses = target_course.campuses.all()
+	form = EditCourseForm(instance = target_course)
+
+	return render(request, 'course_details.html',
+	{'course':target_course,
+	'campuses':campuses,
+	'subjects':subjects,
+	'form':form})
+
+
+def class_details(request, action = None, pk = None):
 
 	"""Handles viewing detailed information on a specific class."""
-	
-	detail_for = Class.objects.get(pk = pk)
 
-	if action == 'class_info':
-		return render(request, 'class_details.html',
-		{'class':detail_for})
+	if action and pk != None:
+		target_class = Class.objects.get(pk=pk)
+		target_students = target_class.students.all()
+		target_teachers = target_class.teachers.all()
+
+		if action == 'edit':
+			if request.method == 'POST':
+				form = EditClassForm(request.POST,
+					instance = target_class)
+				if form.is_valid():
+					form.save()
+
+					return render(request, 'class_details.html',
+						{'form':form,
+						'class':target_class,
+						'students':target_students,
+						'teachers':target_teachers})
+
+				else:
+
+					return render(request, 'class_details.html',
+						{'form':form,
+						'class':target_class,
+						'students':target_students,
+						'teachers':target_teachers})
+
+			else:
+				form = EditClassForm(instance = target_class)
+
+				return render(request, 'class_details.html',
+				{'form':form,
+				'class':target_class,
+				'students':target_students,
+				'teachers':target_teachers})
+	
+	target_class = Class.objects.get(pk = pk)
+	teachers = target_class.teachers.all()
+	students = target_class.students.all()
+	form = EditClassForm(instance = target_class)
+
+	return render(request, 'class_details.html',
+	{'class':target_class,
+	'students':students,
+	'teachers':teachers,
+	'form':form})
+
+def remove_class(request, pk):
+	"""Handles marking a class as inactive"""
+
+	target_class = Class.objects.get(pk = pk)
+	target_class.deactivate()

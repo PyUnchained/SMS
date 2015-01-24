@@ -16,7 +16,7 @@
 
 {% block main_content %}
 <h3>Edit Class</h3>
-<div class="profile-heading">
+<div class="">
 	<h3>{{class.code}}</h3>
 	<h4> Status: {% if class.is_active %}
 		<span class = 'active'>Active</span>
@@ -30,31 +30,31 @@
 
 
 <div class="profile-entry profile">
-	<form class="profile-form" action="{% url 'class_details' action='edit' pk=class.pk %}" method="POST">
+	<form class="profile-form text-center" action="{% url 'class_details' action='edit' pk=course.pk %}" method="POST">
 	    {% csrf_token %}
 	
 	<h4>Course Information</h4>
 	<div class="row">
 		<div class="col-sm-4">
-			<strong>Name</strong><br>{{form.code}}
+			<strong>Title</strong><br>{{form.title}}
 		</div>
 		<div class="col-sm-4">
-			<strong>Course</strong><br>{{form.course}}
+			<strong>Subtitle</strong><br>{{form.subtitle}}
 		</div>
 		<div class="col-sm-4">
-			<strong>Exam Date</strong><br>{{form.exam_date}}
+			<strong>Syllabus Code</strong><br>{{form.syllabus_code}}
 		</div>	
 	</div>
 	<div class="row">
 		<div class="col-sm-4">
-			<strong>Schedule</strong><br>{{form.schedule}}
-			{{form.schedule.errors}}
+			<strong>Price</strong><br>{{form.price}}
 		</div>
 		<div class="col-sm-4">
-			<strong>Max Student No.</strong><br>{{form.max_students}}
+			<strong>Duration</strong><br>{{form.duration}}
 		</div>
 		<div class="col-sm-4">
-			<strong>Min Student No.</strong><br>{{form.min_students}}
+			<strong>Brochure</strong><br>{{form.info_file}}
+			{{form.info_file.errors}}
 		</div>	
 	</div>
 	<br>
@@ -63,14 +63,14 @@
 	<hr>
 	<div class="row">
 		<div class="col-sm-6">
-			<h4>Manage Students ({{students|length}})</h4>
+			<h4>Manage Subjects ({{subjects|length}})</h4>
 			<!-- Search-box -->
 			<div class="search-wrapper">
 				<div class="row">
 					<div class="col-sm-12">
-						<p>Add Student:</p>
-						<input id="search-students-add-class" placeholder = 'Type to Begin Search' type="text"/>
-						<div id="search-students-add-class-results">
+						<p>Add Subject:</p>
+						<input id="search-subject-add-course" placeholder = 'Type to Begin Search' type="text"/>
+						<div id="search-subject-add-course-results">
 			        	</div>
 					</div>
 				</div>
@@ -79,20 +79,16 @@
 			<table class="table table-responsive table-striped view-results-table">
 				<thead class="centered-text">
 					<tr>
-						<th>ID</th>
-						<th>Name</th>
+						<th>Title</th>
+						<th>Code</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
-				{% for student in students %}
+				{% for subject in subjects %}
 				<tr>
-					<td>{{student.personid}}</td>
-					<td>
-						{{student.user.first_name}}
-						{{student.middle_name}}
-						{{student.user.last_name}}
-					</td>
-					<td>
+					<td width = 50%>{{subject.title}}</td>
+					<td width = 25%>{{subject.subject_code}}</td>
+					<td width = 25%>
 					<a class ="btn btn-xs btn-primary" href="{% url 'msg_box_compose' %}">Remove</a>
 					<a class ="btn btn-xs btn-primary" href="{% url 'msg_box_compose' %}">View</a>
 					</td>
@@ -100,45 +96,40 @@
 				{% endfor %}
 				<tfoot>
 					<tr>
-						<th>ID</th>
-						<th>Name</th>
+						<th>Title</th>
+						<th>Code</th>
 						<th>Actions</th>
 					</tr>
 				</tfoot>
 			</table>
 		</div>
-
 		<div class="col-sm-6">
-			<h4>Manage Teachers ({{teachers|length}})</h4>
+			<h4>Manage Campuses ({{campuses|length}})</h4>
 			<!-- Search-box -->
 			<div class="search-wrapper">
 				<div class="row">
 					<div class="col-sm-12">
-						<p>Add Student:</p>
-						<input id="search-teachers-add-class" placeholder = 'Type to Begin Search' type="text"/>
-						<div id="search-teachers-add-class-results">
+						<p>Add Campus:</p>
+						<input id="search-subject-add-course" placeholder = 'Type to Begin Search' type="text"/>
+						<div id="search-subject-add-course-results">
 			        	</div>
 					</div>
 				</div>
 			</div>
 			<!-- End of search-box -->
-			<table class="table table-responsive table-striped view-results-table">
+			<table class="table table-striped view-results-table">
 				<thead class="centered-text">
 					<tr>
-						<th>ID</th>
 						<th>Name</th>
+						<th>Email</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
-				{% for teacher in teachers %}
+				{% for campus in campuses %}
 				<tr>
-					<td>{{teacher.personid}}</td>
-					<td>
-						{{teacher.user.first_name}}
-						{{teacher.middle_name}}
-						{{teacher.user.last_name}}
-					</td>
-					<td>
+					<td width = 20%>{{campus.name}}</td>
+					<td width = 50%>{{campus.email|truncatechars:15}}</td>
+					<td width =25%>
 					<a class ="btn btn-xs btn-primary" href="{% url 'msg_box_compose' %}">Remove</a>
 					<a class ="btn btn-xs btn-primary" href="{% url 'msg_box_compose' %}">View</a>
 					</td>
@@ -153,24 +144,15 @@
 
 {% block custom-js-ready %}
 
-$( '#search-students-add-class' ).keyup( function() {
-        q = $('#search-students-add-class').val();
-        var q = 'studentaddclass-' + q.replace(/\s+/g,'-');
-        $('#search-students-add-class-results').load( "{% url 'search' pk=class.pk %}"+'?q=' + q );
+$( '#search-subject-add-course' ).keyup( function() {
+        q = $('#search-subject-add-course').val();
+        var q = 'subjectaddcourse-' + q.replace(/\s+/g,'-');
+        $('#search-subject-add-course-results').load( "{% url 'search' pk=course.pk %}"+'?q=' + q );
     });
     
-    $('#search-students-add-class').focusin( function() {
-        $( '#search-students-add-class-results' ).show();
+    $('#search-subject-add-course').focusin( function() {
+        $( '#search-subject-add-course-results' ).show();
     });
 
-    $( '#search-teachers-add-class' ).keyup( function() {
-        q = $('#search-teachers-add-class').val();
-        var q = 'teacheraddclass-' + q.replace(/\s+/g,'-');
-        $('#search-teachers-add-class-results').load( "{% url 'search' pk=class.pk %}"+'?q=' + q );
-    });
-    
-    $('#search-teachers-add-class').focusin( function() {
-        $( '#search-teachers-add-class-results' ).show();
-    });
 
 {% endblock %}

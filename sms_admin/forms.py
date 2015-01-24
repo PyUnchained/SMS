@@ -12,7 +12,7 @@ class EditStudentProfileForm(forms.ModelForm):
 	class Meta:
 		model = Student
 		fields = ('personid', 'middle_name',
-			'sex', 'date_of_birth', 'national_id', 'pic','account_id',
+			'sex', 'date_of_birth', 'national_id', 'pic',
 			'billing_address_street', 'billing_address_city',
 			'billing_address_country', 'homephone', 'preffered_cell',
 			'secondary_cell', 'tertiary_cell', 'email2', 'skype')

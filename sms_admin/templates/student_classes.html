@@ -15,22 +15,11 @@
 
 
 {% block main_content %}
-
-<div class="">
-	<h3>{{ student.user.first_name }} {{ student.user.last_name}}'s Classes</h3>
-	<h4> Status: {% if student.is_active %}
-		<span class = 'active'>Active</span>
-		{% else %}
-		<span class = 'danger'>Inactive</span>
-		{% endif %}
-	</h4>
-</div>
-
 <div class="row">
 	<div class="col-sm-12">
 			<!-- Search-box -->
 	        <div class="search-wrapper">
-	        			<h4>Find Class:</h4>
+	        			<h4>Add Classes:</h4>
 	        			<input id="search-class" placeholder = 'Type to Begin Search' type="text"/>
 	        			<div id="class-results">
 	                	</div>
@@ -48,17 +37,27 @@
 	</div>
 </div>
 <br>
+
+<div class="profile-heading">
+	<h3>{{ student.user.first_name }} {{ student.user.last_name}}'s Classes</h3>
+	<h4> Status: {% if student.is_active %}
+		<span class = 'active'>Active</span>
+		{% else %}
+		<span class = 'danger'>Inactive</span>
+		{% endif %}
+	</h4>
+</div>
 <!-- End of search-box -->
 
 
-<div class="">	
+<div class="profile">	
 	{% if all_classes %}
 		{% for class in all_classes %}
 
 		{% if class.code in completed_classes %}
-		<div class="profile-item completed-class">
+		<div class="profile-entry completed-class">
 		{% else %}
-		<div class="profile-item">
+		<div class="profile-entry">
 		{% endif %}
 		<div class="row">
 
@@ -99,6 +98,7 @@
 	{% else %}
 		<p> Student has no active classes</p>
 	{% endif %}
+</div>
 </div>
 
 
