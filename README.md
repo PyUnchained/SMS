@@ -60,12 +60,12 @@ mediocre knowledge of everything). Whilst in some respects this affects performa
 much faster than Python) Python provides better scalability, ease of development and cohesion in the logic.
   
 
-Outline
-*******
+Basic Outline
+***
 
 Major functional aspects of the site are broken up into several discrete apps. All of the apps listed below have been
 created for the SMS system. Whilst some apps, for example the calendar app, are effectively stand alone, some are
-closely related, although the goal is for each app to stand completely alone. Those marked with an asterix (*) are
+closely related, although the goal is for each app to stand alone. Those marked with an asterix (*) are
 either still in the very early stages of development or still rapidly changing.
 
 bookkeeping* - Basic bookkeeping functions
@@ -75,9 +75,26 @@ cal - calendar with the ability to add and display events and send e-mail remind
 msg_box - handles delivery of internal communications to students as well as e-mails (sent from a suitable gmail account
 accessible to the server).
 
-office* - handles the storage and manipulation of student and staff records, including associated classes, student
+office - handles the storage and manipulation of student and staff records, including associated classes, student
 results, etc.
 
-sms_admin* - provides the means for users to actually create, view and manipulate information on the system. It
+sms_admin - provides the means for users to actually create, view and manipulate information on the system. It
 basically ties all of the apps together and presents them in a logical way (as an aside, the admin's color scheme
 is a nod to the admin panel that comes with django).
+
+search* - handles lookups for the information contained in the database and will mainly function through a reliance on template tags to generate content when and where needed.
+
+Current Development Direction
+***
+
+After getting to know django more, I have started to make major revisions to the system. The basic functionality for the major apps is all now in place and my goal is not to change the functionality, my main aims are:
+- Provide a more logically consistent layout for the code.
+- Leveraging helper functions to perform common tasks.
+- Increasing the modularity, allowing each app to be more stand-alone. This will be important for future development, since many provide functionality that will be useful in various situations.
+
+The major changes will have to do with simplifying code. The following are key:
+- Add Context Processors – a context processor essentially provides values to be used when django is rendering templates, essentially by adding a dictionary of values to the context used to render a page. Context processors will be used to integrate functionality that affects all or the majority of the pages. Examples would be the crumbs, urls for the previous pages and the common actions section.
+- Add template tags – template tags trigger the execution of a specific function which returns a value that will then be rendered on the page. These are a more modular version of a context processor, because the tags need only be called for specific functions. The key areas of use would be: (1) Allowing modules to share information between each-other, (2) simplifying creation of complex, reusable code, especially where this code is a mixture of python, django template language and javascript or css and (3) making apps more stand-alone, to ease debugging and future development.
+- Search App – in the beginning, the search functionality was very basic. Now, however, I use the search functionality in many places, for example adding a subject to a course, one would first search for the subject, then in the list of results click the subject to add. Because the actions to be performed depend heavily on what action is being carried out (javascript will depend on the action to be taken, i.e. adding, deleting, autocompleting, etc. Python search algorithm will depend on what is being searched for, i.e. students, teachers, classes, etc) the simplest way to do this would be to have a dedicated app used for searching and returning the results.
+
+
