@@ -8,13 +8,15 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from django.contrib.auth.models import User
 from django.db.models import Q
 
 #Required to safely format and return html
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+
+from gem_soft.utility import previous_url
 
 from msg_box.models import Message
 from office.models import *
@@ -25,6 +27,9 @@ from sms_admin.forms import EditStudentProfileForm, EditUserForm
 
 from sms_admin.conf import*
 # Create your views here.
+
+
+
 
 def reverse_trail_gen(trail = None):
 	"""
@@ -199,7 +204,7 @@ def view_classes(request, student_id, action = None):
 			'class_search_form': search_form})
 
 
-def all_classes(request, action = None, pk = None):
+def all_classes(request, action = None, pk = None, student_pk = None):
 	"""
 	Allows users to view a list of all classes
 	"""
@@ -212,6 +217,14 @@ def all_classes(request, action = None, pk = None):
 			target_class = Class.objects.get(pk = pk)
 			target_class.deactivate()
 			target_class.save()
+
+		if action == 'class_details_remove_student':
+			target_class = Class.objects.get(pk = pk)
+			target_student = Student.objects.get(pk = student_pk)
+			target_class.remove(target_student)
+			target_class.save()
+
+
 
 	class_list = Class.objects.filter(is_active = True)
 
@@ -234,7 +247,7 @@ def all_classes(request, action = None, pk = None):
 				{'all_classes':all_classes},
 			    context_instance = RequestContext(request))
 
-def all_courses(request, action = None, pk = None):
+def all_courses(request, action = None, pk = None, subject_pk = None):
 	"""
 	Allows users to view a list of all classes
 	"""
@@ -244,9 +257,17 @@ def all_courses(request, action = None, pk = None):
 
 		#Marks class as deactivated.
 		if action == 'remove':
-			target_class = Course.objects.get(pk = pk)
-			target_class.deactivate()
-			target_class.save()
+			target_course = Course.objects.get(pk = pk)
+			target_course.is_active = False
+			target_course.save()
+
+		if action == 'subject_details_remove':
+
+			target_course = Course.objects.get(pk = pk)
+			target_subject = Subject.objects.get(pk = subject_pk)
+			target_subject.courses.remove(target_course)
+
+			return HttpResponseRedirect(previous_url(request))
 
 	course_list = Course.objects.filter(is_active = True)
 
@@ -266,7 +287,8 @@ def all_courses(request, action = None, pk = None):
 		all_courses = paginator.page(paginator.num_pages)
 
 	return render_to_response('all_courses.html',
-				{'all_courses':all_courses},
+				{'all_courses':all_courses,
+				'total':len(course_list)},
 			    context_instance = RequestContext(request))
 
 def course_details(request, action = None, pk = None):
@@ -323,6 +345,7 @@ def course_details(request, action = None, pk = None):
 def class_details(request, action = None, pk = None):
 
 	"""Handles viewing detailed information on a specific class."""
+	back_url = previous_url(request)
 
 	if action and pk != None:
 		target_class = Class.objects.get(pk=pk)
@@ -340,7 +363,8 @@ def class_details(request, action = None, pk = None):
 						{'form':form,
 						'class':target_class,
 						'students':target_students,
-						'teachers':target_teachers})
+						'teachers':target_teachers,
+						'back_url':back_url})
 
 				else:
 
@@ -348,7 +372,8 @@ def class_details(request, action = None, pk = None):
 						{'form':form,
 						'class':target_class,
 						'students':target_students,
-						'teachers':target_teachers})
+						'teachers':target_teachers,
+						'back_url':back_url})
 
 			else:
 				form = EditClassForm(instance = target_class)
@@ -357,7 +382,8 @@ def class_details(request, action = None, pk = None):
 				{'form':form,
 				'class':target_class,
 				'students':target_students,
-				'teachers':target_teachers})
+				'teachers':target_teachers,
+				'back_url':back_url})
 	
 	target_class = Class.objects.get(pk = pk)
 	teachers = target_class.teachers.all()
@@ -368,10 +394,90 @@ def class_details(request, action = None, pk = None):
 	{'class':target_class,
 	'students':students,
 	'teachers':teachers,
-	'form':form})
+	'form':form,
+	'back_url':back_url})
 
-def remove_class(request, pk):
-	"""Handles marking a class as inactive"""
+def all_subjects(request, action = None, pk = None):
+	"""
+	Allows users to view a list of all classes
+	"""
+	
+	#If an action has been requested
+	if action and pk != None:
 
-	target_class = Class.objects.get(pk = pk)
-	target_class.deactivate()
+		#Marks subject as deactivated.
+		if action == 'remove':
+			target_subject = Subject.objects.get(pk = pk)
+			target_subject.is_active = False
+			target_subject.save()
+
+	subject_list = Subject.objects.filter(is_active = True)
+
+	#Paginator handles displaying and changing between pages. Diplays
+	#20 records at a time from the student_list queryset.
+	paginator = Paginator(subject_list, 20)
+
+
+	page = request.GET.get('page')
+	try:
+		all_subjects = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		all_subjects = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		all_subjects = paginator.page(paginator.num_pages)
+
+	return render_to_response('all_subjects.html',
+				{'all_subjects':all_subjects,
+				'total':len(subject_list)},
+			    context_instance = RequestContext(request))
+
+def subject_details(request, action = None, pk = None):
+
+	"""Handles viewing detailed information on a specific class."""
+	back_url = previous_url(request)
+
+	if action and pk != None:
+		target_subject = Subject.objects.get(pk=pk)
+		courses = target_subject.courses.all()
+
+		if action == 'edit':
+			if request.method == 'POST':
+				form = EditSubjectForm(request.POST,
+					instance = target_subject)
+				if form.is_valid():
+					form.save()
+
+					return render(request, 'subject_details.html',
+						{'form':form,
+						'subject':target_subject,
+						'courses':courses,
+						'back_url':back_url})
+
+				else:
+
+					return render(request, 'subject_details.html',
+						{'form':form,
+						'subject':target_subject,
+						'courses':courses,
+						'back_url':back_url})
+
+			else:
+				form = EditSubjectForm(instance = target_subject)
+
+				return render(request, 'subject_details.html',
+				{'form':form,
+				'subject':target_subject,
+				'courses':courses,
+				'back_url':back_url})
+	
+	target_subject = Subject.objects.get(pk = pk)
+	courses = target_subject.courses.all()
+	form = EditSubjectForm(instance = target_subject)
+
+	return render(request, 'subject_details.html',
+	{'subject':target_subject,
+	'courses':courses,
+	'form':form,
+	'back_url':back_url})

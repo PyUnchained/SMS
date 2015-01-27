@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main_content_nav %}
+<div class ="btn-group">
+	{% if back_url %}
+		<a href ='{{back_url}}' class="btn btn-primary">Back to Registry <i class = 'fa fa-reply'></i> </a>
+	{% endif %}
+</div>
+
+
+{% endblock %}
+
+
+{% block main_content %}
+<h3>Edit Subject</h3>
+<div class="">
+	<h3>{{subject.subject_code}}</h3>
+	<h4> Status: {% if subject.is_active %}
+		<span class = 'active'>Active</span>
+		{% else %}
+		<span class = 'danger'>Inactive</span>
+		{% endif %}
+	</h4>
+	
+</div>
+
+
+
+<div class="profile-entry profile">
+	<form class="profile-form" action="{% url 'subject_details' action='edit' pk=subject.pk %}" method="POST">
+	    {% csrf_token %}
+	
+	<h4>Subject Information</h4>
+	<div class="row">
+		<div class="col-sm-4">
+			<strong>Title</strong><br>{{form.title}}
+		</div>
+		<div class="col-sm-4">
+			<strong>Subtitle</strong><br>{{form.subtitle}}
+		</div>
+		<div class="col-sm-4">
+			<strong>Subject Code</strong><br>{{form.subject_code}}
+		</div>	
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-sm-12">
+			<strong>Description</strong><br>{{form.description}}
+			{{form.description.errors}}
+		</div>
+	</div>
+	<br>
+	<input class = "btn btn-primary" type = 'submit' value = "Save Changes">
+	</form>
+	<hr>
+	<div class="row">
+		<div class="col-sm-6">
+			<h4>Manage Courses ({{courses|length}})</h4>
+			<!-- Search-box -->
+			<div class="search-wrapper">
+				<div class="row">
+					<div class="col-sm-12">
+						<p>Add Course:</p>
+						<input id="search-subject-add-course" placeholder = 'Type to Begin Search' type="text"/>
+						<div id="search-subject-add-course-results">
+			        	</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of search-box -->
+			<table class="table table-responsive table-striped view-results-table">
+				<thead class="centered-text">
+					<tr>
+						<th>Title</th>
+						<th>Code</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				{% for course in courses %}
+				<tr>
+					<td width = 50%>{{course.title}}</td>
+					<td width = 25%>{{course.syllabus_code}}</td>
+					<td width = 25%>
+					<a class ="btn btn-xs btn-primary" href="{% url 'all_courses' action='subject_details_remove' pk=course.pk subject_pk=subject.pk %}">Remove</a>
+					<a class ="btn btn-xs btn-primary" href="{% url 'course_details' pk=course.pk %}">View</a>
+					</td>
+				</tr>
+				{% endfor %}
+				<tfoot>
+					<tr>
+						<th>Title</th>
+						<th>Code</th>
+						<th>Actions</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<div class="col-sm-6">
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block custom-js-ready %}
+
+$( '#search-subject-add-course' ).keyup( function() {
+        q = $('#search-subject-add-course').val();
+        var q = 'subjectaddcourserev-' + q.replace(/\s+/g,'-');
+        $('#search-subject-add-course-results').load( "{% url 'search' pk=subject.pk %}"+'?q=' + q );
+    });
+    
+    $('#search-subject-add-course').focusin( function() {
+        $( '#search-subject-add-course-results' ).show();
+    });
+
+{% endblock %}

@@ -160,6 +160,16 @@ class Campus(models.Model):
 	address = models.CharField(max_length = 50)
 	email = models.EmailField()
 	website = models.URLField(blank = True, null = True)
+	is_active = models.BooleanField(default = True)
+
+	def deactivate(self):
+		self.is_active == False
+		return self.is_active
+
+	def activate(self):
+		self.is_active == True
+		return self.is_active
+
 
 	def print_class():
 		return self.name
@@ -187,6 +197,14 @@ class Course(models.Model):
 	subjects = models.ManyToManyField('Subject', null = True)
 
 	is_active = models.BooleanField(default = True)
+
+	def deactivate(self):
+		self.is_active == False
+		return self.is_active
+
+	def activate(self):
+		self.is_active == True
+		return self.is_active
 
 	def __str__(self):
 		return '{} ({})'.format(self.title, self.syllabus_code)
@@ -251,12 +269,21 @@ class Subject(models.Model):
 
 	is_active = models.BooleanField(default = True)
 
+	def deactivate(self):
+		self.is_active == False
+		return self.is_active
+
+	def activate(self):
+		self.is_active == True
+		return self.is_active
+
 	def __str__(self):
 		return self.title
 
 
 	class Meta:
-		unique_together = (('title','subtitle'))
+		unique_together = (('title','subtitle'),
+			('title','subject_code'))
 
 
 	class Admin():

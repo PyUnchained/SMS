@@ -2,8 +2,7 @@
 
 {% load static %}
 {% block main_content %}
-	<h3>Course Registry</h3>
-
+	<h3>Course Registry {{total}}</h3>
 	<div class = 'search-bar'>
 		<div class = 'search-row row'>
 			<div class="col-sm-4 search-col">
@@ -18,7 +17,7 @@
 	<br>
 	<br>
 	<div class="results">
-		{% if all_courses.paginator.num_pages > 1 %}
+		{% if all_courses.paginator.num_pages >= 1 %}
 		<div class="result-pagination">
 				<span class="step-links">
 					{% if all_courses.has_previous %}
@@ -40,8 +39,8 @@
 				<tr>
 					<th>Title</th>
 					<th>Syllabus Code</th>
-					<th>Duration (weeks)</th>
-					<th>Actions</th>
+					<th class="text-center">Duration (weeks)</th>
+					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			{% for course in all_courses %}
@@ -53,10 +52,10 @@
 
 				<td width=150>{{course.title}}</td>
 				<td width=150>{{course.syllabus_code }}</td>
-				<td>{{course.duration}}</td>
-				<td>
+				<td class="text-center">{{course.duration}}</td>
+				<td class="text-center">
 				<a class="btn btn-sm" href="{% url 'course_details' action='edit' pk=course.pk %}">View/Edit</a>
-				<a class="btn btn-sm" href="#">Remove</a>
+				<a class="btn btn-sm" href="{% url 'all_courses' action='remove' pk=course.pk %}">Remove</a>
 				<a class="btn btn-sm" href="#">Schedule</a>
 				</td>
 			</tr>

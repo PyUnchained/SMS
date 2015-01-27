@@ -31,6 +31,9 @@ urlpatterns = patterns('',
     url(r'^classes/(?P<action>\w+)/(?P<pk>\d+)/$',
         'sms_admin.views.all_classes', name = 'all_classes'),
 
+    url(r'^classes/(?P<action>\w+)/(?P<course_pk>\d+)/$',
+        'sms_admin.views.all_classes', name = 'all_classes'),
+
     url(r'^ajax-add-student-to-class/$',
         'office.views.PersonToClass', name = 'add_person_to_class'),
 
@@ -40,11 +43,32 @@ urlpatterns = patterns('',
     url(r'^courses/(?P<action>\w+)/(?P<pk>\d+)/$',
         'sms_admin.views.all_courses', name = 'all_courses'),
 
+    url(r'^courses/(?P<action>\w+)/(?P<pk>\d+)/(?P<subject_pk>\d+)/$',
+        'sms_admin.views.all_courses', name = 'all_courses'),
+
     url(r'^course_details/(?P<pk>\d+)/$',
         'sms_admin.views.course_details', name = 'course_details'),
 
     url(r'^course_details/(?P<action>\w+)/(?P<pk>\d+)/$',
         'sms_admin.views.course_details', name = 'course_details'),
+
+    url(r'^ajax-add-subject-to-course/$',
+        'office.views.SubjectToCourse', name = 'add_subject_to_course'),
+
+    url(r'^ajax-add-course-to-campus/$',
+        'office.views.CourseToCampus', name = 'add_course_to_campus'),
+
+    url(r'^subjects/$',
+        'sms_admin.views.all_subjects', name = 'all_subjects'),
+
+    url(r'^subjects/(?P<action>\w+)/(?P<pk>\d+)/$',
+        'sms_admin.views.all_subjects', name = 'all_subjects'),
+
+    url(r'^subject_details/(?P<pk>\d+)/$',
+        'sms_admin.views.subject_details', name = 'subject_details'),
+
+    url(r'^subject_details/(?P<action>\w+)/(?P<pk>\d+)/$',
+        'sms_admin.views.subject_details', name = 'subject_details'),
 
 
 )

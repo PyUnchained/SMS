@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block main_content %}
+	<h3>Subject Registry ({{total}})</h3>
+	
+	<div class = 'search-bar'>
+		<div class = 'search-row row'>
+			<div class="col-sm-4 search-col">
+				<p>Search for subject:</p>
+				<input id="search-subject" placeholder = 'Type to Begin Search' type="text"/>
+    			<div id="subject-results">
+            	</div>				
+			</div>
+		</div>
+	</div>
+	<a class="btn" href="#">Create New Class</a>
+	<br>
+	<br>
+	<div class="results">
+		{% if all_subjects.paginator.num_pages > 1 %}
+		<div class="result-pagination">
+				<span class="step-links">
+					{% if all_subjects.has_previous %}
+						<a class="btn btn-sm" href="?page={{ all_subjects.previous_page_number }}"><i class = 'fa fa-toggle-left'></i> Previous</a>
+					{% endif %}
+				<span class="current">
+					Page {{ all_subjects.number }} of {{ all_subjects.paginator.num_pages }}.
+				</span>
+					{% if all_subjects.has_next %}
+						<a class="btn btn-sm" href="?page={{ all_subjects.next_page_number }}">Next <i class = 'fa fa-toggle-right'></i></a>
+					{% endif %}
+				</span>
+			</div>
+		{% endif %}
+		
+		<table id = 'view-results-table' class="table table-responsive table-striped">
+			<thead class="centered-text">
+				<tr>
+					<th>Title</th>
+					<th>Subject Code</th>
+					<th>Details</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			{% for subject in all_subjects %}
+			{% if subject.is_active %}
+			<tr class = 'active-entry'>
+			{% else %}
+			<tr class = 'inactive-entry'>
+			{% endif %}
+
+				<td>{{subject.title}}</td>
+				<td>{{subject.subject_code}}</td>
+				<td>{{subject.description|truncatewords:30}}</td>
+				<td class ='text-center'>
+				<a class="btn btn-sm" href="{% url 'subject_details' action='edit' pk=subject.pk %}">View/Edit</a>
+				<a class="btn btn-sm" href="{% url 'all_subjects' action='remove' pk=subject.pk %}">Remove</a>
+				<a class="btn btn-sm" href="#">Schedule</a>
+				</td>
+			</tr>
+			{% endfor %}
+			<tfoot>
+				<tr>
+					<th>Title</th>
+					<th>Subject Code</th>
+					<th>Details</th>
+					<th>Actions</th>
+				</tr>
+			</tfoot>
+		</table>
+
+
+		
+			{% if all_subjects.paginator.num_pages > 1 %}
+			<div class="result-pagination">
+					<span class="step-links">
+						{% if all_subjects.has_previous %}
+							<a class="btn btn-sm" href="?page={{ all_subjects.previous_page_number }}"><i class = 'fa fa-toggle-left'></i> Previous</a>
+						{% endif %}
+					<span class="current">
+						Page {{ all_subjects.number }} of {{ all_subjects.paginator.num_pages }}.
+					</span>
+						{% if all_subjects.has_next %}
+							<a class="btn btn-sm" href="?page={{ all_subjects.next_page_number }}">Next <i class = 'fa fa-toggle-right'></i></a>
+						{% endif %}
+					</span>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block sidebar %}
+	<h3>Notifications</h3>
+
+{% endblock %}

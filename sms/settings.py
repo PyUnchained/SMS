@@ -27,6 +27,7 @@ TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
 
+
 #Select where the root media folder is
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
@@ -59,10 +60,10 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'office',
     'sms_admin',
-    
     'msg_box',
     'cal',
     'autofixture',
+    'gem_soft',
 )
 
 MIDDLEWARE_CLASSES = (

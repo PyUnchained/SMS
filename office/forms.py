@@ -46,4 +46,9 @@ class EditCourseForm(forms.ModelForm):
 		fields = ('title', 'subtitle', 'syllabus_code', 'campuses',
 			'price', 'duration', 'info_file')
 
+class EditSubjectForm(forms.ModelForm):
+	
+	class Meta:
+		model = Subject
+		exclude = ('is_active',)
 		
