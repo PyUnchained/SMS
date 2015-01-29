@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load search_box_tags %}
+
+{% block main_content%}
+
+{% view_search student %}
+{% view_search teacher %}
+{% view_search course %}
+
+{% endblock %}

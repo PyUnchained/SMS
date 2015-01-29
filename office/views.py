@@ -132,6 +132,27 @@ def search(request, pk = None):
 				(Q(personid__icontains = x) for x in criteria[1:])
 				))
 
+		if criteria[0] == '[view' and criteria[1] == 'staff]':
+			
+			#search the records. Uses a generator function to
+			#create query conditions for every value in the
+			#search criterion
+			result1 = Staff.objects.filter(reduce(operator.and_,
+				(Q(user__first_name__icontains = x) for x in criteria[2:])
+				))
+			result2 = Staff.objects.filter(reduce(operator.and_,
+				(Q(user__last_name__icontains = x) for x in criteria[2:])
+				))
+
+			name_result = list(chain(result1, result2))
+
+
+			#since the id is only found in the student profiles
+			#it is searched separately.
+			id_result = Staff.objects.filter(reduce(operator.and_,
+				(Q(personid__icontains = x) for x in criteria[2:])
+				))
+
 		if criteria[0] == 'class':
 			
 			#search the records. Uses a generator function to

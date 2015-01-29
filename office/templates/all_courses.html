@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
-
+{% load search_box_tags %}
 {% load static %}
 {% block main_content %}
-	<h3>Course Registry {{total}}</h3>
+	<h3>Course Registry ({{total}})</h3>
 	<div class = 'search-bar'>
 		<div class = 'search-row row'>
 			<div class="col-sm-4 search-col">
 				<p>Search for course:</p>
-				<input id="search-group" placeholder = 'Type to Begin Search' type="text"/>
-    			<div id="group-results">
-            	</div>				
+				{% view_search course %}		
 			</div>
 		</div>
 	</div>

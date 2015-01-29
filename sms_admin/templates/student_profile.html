@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load search_box_tags %}
+
 
 {% block main_content_nav %}
 <div class ="btn-group">
@@ -15,10 +17,8 @@
         <div class="search-wrapper">
         	<div class="row">
         		<div class="col-sm-4">
-        			<h4>Find Student/Staff</h4>
-        			<input id="search-students" placeholder = 'Type to Begin Search' type="text"/>
-        			<div id="results">
-                	</div>
+        			<h4>Find Student</h4>
+        			{% view_search student %}
         		</div>
         		<div class="col-sm-4">
         		</div>

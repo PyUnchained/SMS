@@ -19,6 +19,7 @@
             <div class="col-xs-8" id = 'top-banner-main-text'>
                 <h4>Student Management System (SMS)</h4>
                 <h6>powered by webgems</h6>
+
             </div>
             <div class="col-xs-4" id = 'top-banner-text'>
                 <div class="col-xs-6">
@@ -131,6 +132,29 @@ $(document).ready( function() {
         $clamp(obj, {clamp: 6});
     });
 
+    $( '.search-input' ).keyup( function() {
+        var search_terms = $(this).val();
+        var result_id = '#'+$(this).attr('id') + '-result';
+        var q = '['+ $(this).attr('id') +']' +'-'+ search_terms.replace(/\s+/g,'-');
+        $(result_id).load( "{% url 'search_box_search' %}"+'?q=' + q );
+        console.log( q);
+    });
+
+    $('.search-input').focusin( function() {
+        var result_id = '#'+$(this).attr('id') + '-result';
+        $(result_id).show();
+    });
+
+    $('.search-input').focusout( function() {
+        var result_id = '#'+$(this).attr('id') + '-result';
+        setTimeout(
+          function() 
+          {
+            $(result_id).hide();
+          }, 100);
+    });
+
+    
 
     $(function(){
         $('#id_date').datepicker({
@@ -141,6 +165,10 @@ $(document).ready( function() {
     $(function(){
         $('#id_time').ptTimeSelect();
     });
+
+
+
+
 
 });
 

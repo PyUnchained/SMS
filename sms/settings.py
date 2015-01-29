@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'cal',
     'autofixture',
     'gem_soft',
+    'search_box',
 )
 
 MIDDLEWARE_CLASSES = (

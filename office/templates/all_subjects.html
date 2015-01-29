@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
+{% load search_box_tags %}
 
 {% block main_content %}
 	<h3>Subject Registry ({{total}})</h3>
@@ -10,9 +10,8 @@
 		<div class = 'search-row row'>
 			<div class="col-sm-4 search-col">
 				<p>Search for subject:</p>
-				<input id="search-subject" placeholder = 'Type to Begin Search' type="text"/>
-    			<div id="subject-results">
-            	</div>				
+				{% view_search subject %}
+            				
 			</div>
 		</div>
 	</div>

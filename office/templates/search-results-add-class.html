@@ -16,7 +16,9 @@
 
 	{% for item in id_result %}
 	<tr>
+		
 		<td class = 'contact'>{{ item.personid }}
+		
 	{{ item.first_name }} {{ item.last_name }}</td>
 		<td><i id = '{{ item.personid }},{{class.pk}}' class="msg_box_icon fa fa-check-square-o"></i></td>
 	</tr>
@@ -51,6 +53,7 @@ $(document).ready( function() {
 	}
 	return cookieValue;
 	}
+
 	 
 	$.ajaxSetup({
 	beforeSend: function(xhr, settings) {
@@ -59,14 +62,20 @@ $(document).ready( function() {
 	xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
 	}
 	}
-	}); 
+	});
+
+	if ($("#search-students-add-class-results").length) {
+		var target_url = '{% url "add_person_to_class" %}';
+	else {
+		alert('Not Found!')
+	}
 
 	$(".results-wrapper i").click(function(){
 		var value = this.id;
 		$.ajax ({
 			type: 'POST',
 			data: {'info':value},
-			url: '{% url "add_person_to_class" %}',
+			url: target_url,
 			success:function(data){
 				alert(data);
 			},

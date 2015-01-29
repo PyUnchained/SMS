@@ -82,7 +82,11 @@ def view_students(request, student_id = None, old_trail = None):
 
 	#When a specific student is requested:
 	if student_id != None:
-		student = Student.objects.get(personid = student_id)
+		try:
+			student = Student.objects.get(pk = student_id)
+		except ValueError:
+			student = Student.objects.get(personid = student_id)
+
 		profile_form = EditStudentProfileForm(instance = student)
 		user_form = EditUserForm(instance = student.user)
 
@@ -270,6 +274,7 @@ def all_courses(request, action = None, pk = None, subject_pk = None):
 			return HttpResponseRedirect(previous_url(request))
 
 	course_list = Course.objects.filter(is_active = True)
+	search_sample = course_list[0]
 
 	#Paginator handles displaying and changing between pages. Diplays
 	#20 records at a time from the student_list queryset.
@@ -288,7 +293,8 @@ def all_courses(request, action = None, pk = None, subject_pk = None):
 
 	return render_to_response('all_courses.html',
 				{'all_courses':all_courses,
-				'total':len(course_list)},
+				'total':len(course_list),
+				'course':search_sample},
 			    context_instance = RequestContext(request))
 
 def course_details(request, action = None, pk = None):
@@ -331,7 +337,7 @@ def course_details(request, action = None, pk = None):
 				'course':target_course})
 	
 	target_course = Course.objects.get(pk = pk)
-	subjects = target_course.subject_set.all()
+	subjects = target_course.subjects.all()
 	campuses = target_course.campuses.all()
 	form = EditCourseForm(instance = target_course)
 
@@ -412,6 +418,7 @@ def all_subjects(request, action = None, pk = None):
 			target_subject.save()
 
 	subject_list = Subject.objects.filter(is_active = True)
+	search_sample = subject_list[0]
 
 	#Paginator handles displaying and changing between pages. Diplays
 	#20 records at a time from the student_list queryset.
@@ -430,7 +437,8 @@ def all_subjects(request, action = None, pk = None):
 
 	return render_to_response('all_subjects.html',
 				{'all_subjects':all_subjects,
-				'total':len(subject_list)},
+				'total':len(subject_list),
+				'subject':search_sample},
 			    context_instance = RequestContext(request))
 
 def subject_details(request, action = None, pk = None):

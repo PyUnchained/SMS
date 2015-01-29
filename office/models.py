@@ -265,7 +265,6 @@ class Subject(models.Model):
 		max_length = 50)
 	description = models.TextField('Description',
 		max_length = 300)
-	courses = models.ManyToManyField(Course)
 
 	is_active = models.BooleanField(default = True)
 

@@ -13,6 +13,9 @@ urlpatterns = patterns('',
     url(r'^view_students/(\w+)/$',
     	'sms_admin.views.view_students', name = 'view_one_student'),
 
+    url(r'^view_students/(\d+)/$',
+        'sms_admin.views.view_students', name = 'view_one_student'),
+
     url(r'^student_classes/(\w+)/$',
     	'sms_admin.views.view_classes', name = 'view_student_classes'),
 
@@ -32,6 +35,9 @@ urlpatterns = patterns('',
         'sms_admin.views.all_classes', name = 'all_classes'),
 
     url(r'^classes/(?P<action>\w+)/(?P<course_pk>\d+)/$',
+        'sms_admin.views.all_classes', name = 'all_classes'),
+
+    url(r'^classes/(?P<action>\w+)/(?P<pk>\d+)/(?P<student_pk>\d+)/$',
         'sms_admin.views.all_classes', name = 'all_classes'),
 
     url(r'^ajax-add-student-to-class/$',

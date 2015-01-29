@@ -50,7 +50,7 @@ class JournalManager(models.Manager):
 		return books
 
 
-class JournalEntry(models.Model):
+class BookEntry(models.Model):
 
 	METHODS = (
 		('C','Cash'),
@@ -95,10 +95,10 @@ class JournalEntry(models.Model):
 				self.custom_description)
 		super(JournalEntry, self).save( *args, **kwargs)
 
-class EntryDescription(model.Models):
+class EntryDescription(models.Model):
 	text = models.CharField(max_length = 150)
 
-class JournalBook(model.Models):
+class JournalBook(models.Model):
 	db_id = models.CharField(max_length = 2)
 	name = models.CharField(max_length = 150)
 

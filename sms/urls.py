@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^msg/', include('msg_box.urls')),
     url(r'^office/', include('office.urls')),
     url(r'^cal/', include('cal.urls')),
+    url(r'^search/', include('search_box.urls')),
 )
 
 #These lines of code are needed for the django development server to serve media files.
