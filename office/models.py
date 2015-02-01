@@ -298,7 +298,6 @@ class Assignment(models.Model):
 		upload_to = 'instructions/%Y', blank =True,
 		null = True)
 	classes = models.ManyToManyField(Class, null = True)
-	subject = models.ManyToManyField(Subject, null = True)
 	due_date = models.DateTimeField('Due Date')
 	set_by = models.ForeignKey(Staff)
 

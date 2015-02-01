@@ -2,46 +2,50 @@
 
 
 <div class="search-box-results">
+
+{% if search_type == 'view' %}
+	{% if url_name %}
+
+
+	{% for name in name_list %}
+	<a class = 'search-box-result' href ="{% url url_name name.pk %}">
+	{{ name.user.first_name }}
+	{{ name.title }}
+	</a><br>
+	{% endfor %}
+
+	{% for id in id_list %}
+	<a class = 'search-box-result' href ="{% url url_name id.pk %}">
+	{{ id.personid }}
+	{{ id.code }}
+	{{ id.syllabus_code }}
+	</a><br>
+	{% endfor %}
+
+	{% else %}
+
+	Search-box Temporarily Unavailable (search_result template error)
+
+	{% endif %}
+
+{% elif search_type == 'add' %}
 	
-{% if list_variant == 'students' %}
 
-{% for name in name_list %}
-<a href ="{% url 'view_one_student' name.pk %}">{{ name.user.first_name }}</a><br>
-{% endfor %}
+	{% for name in name_list %}
+	<p class = 'search-box-result ' id = >
+	{{ name.user.first_name }}
+	{{ name.title }}
+	</p><br>
+	{% endfor %}
 
-{% for id in id_list %}
-<a href ="{% url 'view_one_student' id.pk %}">{{ id.personid }}</a><br>
-{% endfor %}
+	{% for id in id_list %}
+	<p class = 'search-box-result'>
+	{{ id.personid }}
+	{{ id.code }}
+	{{ id.syllabus_code }}
+	</p><br>
+	{% endfor %}
 
-{% elif list_variant == 'staff' %}
-
-{% for name in name_list %}
-<a href ="#">{{ name.user.first_name }}</a><br>
-{% endfor %}
-
-{% for id in id_list %}
-<a href ="#">{{ id.personid }}</a><br>
-{% endfor %}
-
-{% elif list_variant == 'courses' %}
-
-{% for name in name_list %}
-<a href ="{% url 'course_details' name.pk %}">{{ name.title }}</a><br>
-{% endfor %}
-
-{% for id in id_list %}
-<a href ="{% url 'course_details' id.pk %}">{{ id.code }}</a><br>
-{% endfor %}
-
-{% elif list_variant == 'subjects' %}
-
-{% for name in name_list %}
-<a href ="{% url 'subject_details' name.pk %}">{{ name.title }}</a><br>
-{% endfor %}
-
-{% for id in id_list %}
-<a href ="{% url 'subject_details' id.pk %}">{{ id.syllabus_code }}</a><br>
-{% endfor %}
 
 {% endif %}
 
